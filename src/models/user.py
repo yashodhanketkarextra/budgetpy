@@ -41,9 +41,9 @@ def get_user(username: str) -> User | None:
     return next(u for u in fake_users_db if u.name == username)
 
 
-def register_user(user_data: UserDTO) -> bool:
+def register_user(user_data: UserDTO) -> tuple[bool, str]:
     if is_exist(user_data.name):
-        raise Exception("User already exists")
+        return False, "User already exists"
 
     new_user = User(
         id=str(uuid.uuid4()),
@@ -52,7 +52,7 @@ def register_user(user_data: UserDTO) -> bool:
     )
 
     fake_users_db.append(new_user)
-    return True
+    return True, "Success"
 
 
 def encrypt_password(password: str):
@@ -60,8 +60,9 @@ def encrypt_password(password: str):
 
 
 def delete_user(username: str) -> bool:
-    if not is_exist(username):
+    user = get_user(username)
+    if not user:
         return False
 
-    fake_users_db.remove(get_user(username))
+    fake_users_db.remove(user)
     return True

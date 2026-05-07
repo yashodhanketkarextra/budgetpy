@@ -7,8 +7,17 @@ prod:
 test:
 	@PYTHONPATH=src PY_ENV=test pytest
 
+coverage:
+	@PYTHONPATH=src PY_ENV=test pytest --cov=src --cov-report=html
+
 deps-install:
 	@pip install -r requirements.txt
 
 deps-lock-file:
 	@pip freeze > requirements.txt
+
+docker-build:
+	@docker-compose build
+
+docker-run:
+	@docker-compose up -d

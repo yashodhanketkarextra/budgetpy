@@ -17,16 +17,6 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
-def check_env() -> str:
-    import os
-
-    SECRET_KEY = os.getenv("SECRET_KEY")
-
-    if not SECRET_KEY:
-        raise ValueError("SECRET_KEY is not set")
-    return SECRET_KEY
-
-
 async def create_access_token(
     data: dict,
     expires_delta: timedelta | None = None,

@@ -1,0 +1,8 @@
+services:
+  notespy:
+    build: .
+    container_name: notespy
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY}

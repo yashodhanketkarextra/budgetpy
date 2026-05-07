@@ -9,14 +9,15 @@ userRouter = APIRouter()
 
 
 @userRouter.post("/register")
-async def register_user_handler(data: U.UserDTO):
-    success = await userService.register_user(data)
-    return {"result": "success" if success else "failed"}
+async def register_user_handler(data: U.UserDTO, response: Response):
+    success, message = await userService.register_user(data)
+    response.status_code = 201 if success else 400
+    return {"result": message}
 
 
 @userRouter.get("/users")
 async def get_users_handler():
-    return {"users": userService.get_all_users()}
+    return {"users": await userService.get_all_users()}
 
 
 @userRouter.post("/login")
