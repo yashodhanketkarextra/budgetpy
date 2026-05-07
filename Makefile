@@ -1,3 +1,5 @@
+.PHONY: dev prod test coverage setup deps-install deps-lock-file docker-build docker-run
+
 dev:
 	@PY_ENV=dev python server.py -m dev
 
@@ -21,3 +23,11 @@ docker-build:
 
 docker-run:
 	@docker-compose up -d
+
+setup:
+	@if [ ! -d "./venv/" ]; then \
+		python -m venv venv; \
+	fi
+	@./venv/bin/pip install -r requirements.txt
+	@echo "Use 'source ./venv/bin/activate' to get started"
+

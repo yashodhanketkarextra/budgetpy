@@ -1,7 +1,7 @@
 services:
-  notespy:
+  budgetpy:
     build: .
-    container_name: notespy
+    container_name: budgetpy
     ports:
       - "8000:8000"
     environment:
