@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+bin/
+lib/
+include/
+
+# Environment Variables (Secrets)
+.env
+.env.*
+!.env.example
+
+# FastAPI / Python Distribution & Packaging
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+private/
+
+# Type Checking
+.mypy_cache/
+.pytype/
+
+# Databases (if using local SQLite for dev)
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE Specific Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Specific Files
+.DS_Store
+Thumbs.db
