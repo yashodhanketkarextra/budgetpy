@@ -4,7 +4,7 @@ from tests.conftest import TEST_USER
 
 
 class TestUserManagement:
-    def test_get_all_users_flow(self, client):
+    def test_get_all_users_flow(self, client, db_session):
         assert client.get("/users").json()["users"] == []
 
         client.post("/register", json=TEST_USER)
@@ -14,7 +14,7 @@ class TestUserManagement:
 
         client.delete(f"/users/{TEST_USER['name']}")
 
-    def test_prevent_duplicate_user_registration(self, client):
+    def test_prevent_duplicate_user_registration(self, client, db_session):
         client.post("/register", json=TEST_USER)
         response = client.post("/register", json=TEST_USER)
 
@@ -22,14 +22,14 @@ class TestUserManagement:
         assert response.json()["result"] == "User already exists"
         client.delete(f"/users/{TEST_USER['name']}")
 
-    def test_delete_ghost_user_returns_404(self, client):
+    def test_delete_ghost_user_returns_404(self, client, db_session):
         response = client.delete("/users/ghost_user")
         assert response.status_code == 404
         assert response.json()["result"] == "User not found"
 
 
 class TestMissingEnv:
-    def test_delete_user(self, client):
+    def test_delete_user(self, client, db_session):
         client.post("/register", json=TEST_USER)
         with mock.patch("src.config.settings.PY_ENV", "prod"):
             response = client.delete("/users/test_user")
