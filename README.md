@@ -9,9 +9,7 @@ Tech stack
 -	[X] FastAPI (Integratd)
 -	[X] JWT Authentication
 -	[X] Docker/docker-compose (Partially integratd)
--	[ ] DB (planned ORM free)
-	-	[ ] SQLite during dev phase
-	-	[ ] PostgreSQL for prod
+-	[X] DB PostgreSQL
 -	[ ] Deployment
 	-	[ ] Managed Terraform
 	-	[ ] AWS lambda
@@ -50,6 +48,15 @@ Tech stack
 	(venv)$ make dev # dev mode
 	(venv)$ make prod # prod mode
 	```
+
+#### Environment Variables
+
+Ensure that you have the following environment variables set:
+
+| Name               | Value                       | Info              |
+|--------------------|-----------------------------|-------------------|
+| SECRET_KEY         | 32-bit hex string           |                   |
+| (test,dev,prod)_db | postgresql+psycopg2://dburl | Setup as per need |
 
 ### License
 

@@ -1,17 +1,25 @@
+from sqlalchemy.orm import Session
+
 import src.models.user as U
+import src.repository.user as repo
 from src.models.token import sc
 
 
-async def register_user(data: U.UserDTO):
-    return U.register_user(data)
+def fmt(user) -> dict[str, str | None]:
+    return {"id": str(user.id), "name": str(user.name)}
 
 
-async def get_all_users() -> list[dict[str, str | None]]:
-    return [{"id": user.id, "name": user.name} for user in U.fake_users_db]
+async def register_user(db: Session, data: U.UserDTO):
+    return await repo.create_user(db, user_data=data)
 
 
-async def login_user(data: U.UserDTO) -> tuple[str | None, str, int]:
-    user = U.get_user(data.name)
+async def get_all_users(db: Session) -> list[dict[str, str | None]]:
+    users = await repo.get_all_users(db)
+    return [fmt(user) for user in users]
+
+
+async def login_user(db: Session, data: U.UserDTO) -> tuple[str | None, str, int]:
+    user = await repo.get_user(db, username=data.name)
     if not user:
         return None, "No such user found. Please register", 404
 
@@ -22,11 +30,11 @@ async def login_user(data: U.UserDTO) -> tuple[str | None, str, int]:
     return token, "Success", 200
 
 
-async def delete_user(username: str) -> tuple[str, int]:
+async def delete_user(db: Session, username: str) -> tuple[str, int]:
     if sc.PY_ENV != "test":
         return "Forbidden", 403
 
-    if not U.delete_user(username):
+    if not await repo.delete_user(db, username):
         return "User not found", 404
 
     return "Success", 200
