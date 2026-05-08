@@ -9,17 +9,17 @@ class TestJWTValidation:
     def test_invalidate_jwt_returns_401(self, client):
         response = client.get("/me", headers={"Authorization": "Bearer invalid_token"})
         assert response.status_code == 401
-        assert response.json()["result"] == "Invalid token"
+        assert response.json()["detail"] == "Invalid token"
 
     def test_malformed_jwt_returns_401(self, client):
         response = client.get("/me", headers={"Authorization": "malformed_token"})
         assert response.status_code == 401
-        assert response.json()["result"] == "Malformed token"
+        assert response.json()["detail"] == "Malformed token"
 
     def test_missing_jwt_returns_401(self, client):
         response = client.get("/me")
         assert response.status_code == 401
-        assert response.json()["result"] == "No token provided"
+        assert response.json()["detail"] == "No token provided"
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(

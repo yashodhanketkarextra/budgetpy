@@ -1,5 +1,5 @@
 import src.models.user as U
-from src.models.token import TokenData, sc, validate_token
+from src.models.token import sc
 
 
 async def register_user(data: U.UserDTO):
@@ -20,23 +20,6 @@ async def login_user(data: U.UserDTO) -> tuple[str | None, str, int]:
 
     token = await user.gen_token()
     return token, "Success", 200
-
-
-async def verify_user_token(
-    authorization: str | None,
-) -> tuple[TokenData | None, str, int]:
-    if not authorization:
-        return None, "No token provided", 401
-
-    try:
-        token = authorization.split(" ")[1]
-        tokendata, success = await validate_token(token)
-        if not success:
-            return None, "Invalid token", 401
-
-        return tokendata, "Success", 200
-    except IndexError:
-        return None, "Malformed token", 401
 
 
 async def delete_user(username: str) -> tuple[str, int]:

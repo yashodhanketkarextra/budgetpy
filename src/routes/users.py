@@ -1,9 +1,8 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Header, Response
+from fastapi import APIRouter, Request, Response
 
 import src.models.user as U
 import src.services.user as userService
+from src.middleware.auth import jwt_protect
 
 userRouter = APIRouter()
 
@@ -32,16 +31,13 @@ async def login_user_handler(data: U.UserDTO, response: Response):
 
 
 @userRouter.get("/me")
-async def verify_token_handler(
-    response: Response,
-    authorization: Annotated[str | None, Header()] = None,
-):
-    userdata, message, status = await userService.verify_user_token(authorization)
-
-    response.status_code = status
-    if userdata:
-        return {"result": message, "user": userdata.username, "id": userdata.id}
-    return {"result": message}
+@jwt_protect
+async def verify_token_handler(request: Request):
+    return {
+        "result": "authenticated",
+        "user": request.state.username,
+        "id": request.state.id,
+    }
 
 
 @userRouter.delete("/users/{username}")
